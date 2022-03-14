@@ -1,0 +1,52 @@
+//Set font color
+@function set-text-color($color){
+    @if (lightness($color) > 40%){
+        @return $darkPrimaryColor;
+    }
+    @else{
+        @return $white;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//Breakpoints
+
+// 376px, 640px, 950px, 1440px
+$breakpoints-up: ("small":"23.5em", "medium": "40em", "large":"59.375rem", "xlarge":"90em");
+
+// 375px, 639px, 949px, 1439px
+$breakpoints-down: ("xsmall":"23.4375em", "small":"39.9375em", "medium": "59.3125em", "large":"89.9375em");
+
+@mixin breakpoint-up($size){
+
+    @media(min-width: map-get($breakpoints-up, $size)){
+        @content;
+    }
+}
+
+@mixin breakpoint-down($size){
+
+    @media(max-width: map-get($breakpoints-down, $size)){
+        @content;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//Visibility
+.hide-for-mobile{
+    @include breakpoint-down(medium){
+        display: none;
+    }
+}
+
+.hide-for-desktop{
+    @include breakpoint-up(large){
+        display: none;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+

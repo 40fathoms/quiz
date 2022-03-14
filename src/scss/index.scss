@@ -1,0 +1,136 @@
+@import "variables";
+@import "mixins";
+
+@import "config";
+
+form{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    overflow-x: auto;
+
+    padding: 4rem 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+
+.questions{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.question{
+
+    color: $font;
+    font-weight: 700;
+    font-size: 0.85rem;
+
+    width: 95%;
+    max-width: 1500px;
+
+    padding: 2rem 0;
+    border-bottom: solid 1px $select;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    @include breakpoint-up(medium){      
+        font-size: 1.2rem;
+    }
+
+    h2{
+        font-weight: 700;
+        margin: 0;
+    }
+
+    &-options{
+
+        margin: 0;
+        padding: 0;
+        border: none;
+        position: relative;
+
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 2rem;
+
+        &>input[type="radio"]{
+            display: none;
+        }
+
+        &>input[type="radio"]:checked + label{
+            background-color: $button;
+            color: $white;
+        }
+
+        &>label{
+            border: solid 1px $button;
+            border-radius: 8px;
+            padding: 0.5rem;
+            min-width: 80px;
+            text-align: center;
+            cursor: pointer;
+
+            &.correct{
+                background-color: $green !important;
+                color: $font !important;
+                border: solid 1px transparent;
+            }
+
+            &.incorrect{
+                background-color: $red !important;
+                color: $font !important;
+                border: solid 1px transparent;
+                opacity: 0.5;
+            }
+
+            &:hover{
+                border: solid 1px transparent;
+                background-color: $select;
+            }
+        }
+
+        &>div{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+            background-color: transparent;
+        }
+    }
+}
+
+.button{
+    color: $font;
+    font-weight: 700;
+    font-size: 1.2rem;
+
+    background-color: $button;
+    color: $white;
+    border: none;
+
+    max-width: 200px;
+    border-radius: 8px;
+    padding: 0.5rem;
+
+    &:hover{
+        background-color: $select;
+        color: $font;
+        cursor: pointer;
+    }
+}

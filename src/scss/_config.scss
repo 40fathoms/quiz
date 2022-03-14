@@ -1,0 +1,19 @@
+html{
+    font-size: 100%;  // control zoom level
+    box-sizing: border-box; // include padding in final width
+}
+
+*, *::before, *::after{
+    box-sizing: inherit;
+
+    @import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;500;700&display=swap');
+    font-family: 'Karla', sans-serif;
+}
+
+a, a:visited, a:hover{
+    text-decoration: none;
+}
+
+body{
+    margin: 0;  
+}

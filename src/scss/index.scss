@@ -16,7 +16,7 @@ form{
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 3rem;
 }
@@ -36,7 +36,7 @@ form{
     font-size: 0.85rem;
 
     width: 95%;
-    max-width: 1500px;
+    max-width: 1000px;
 
     padding: 2rem 0;
     border-bottom: solid 1px $select;
@@ -63,18 +63,28 @@ form{
 
         display: flex;
         flex-wrap: wrap;
+        flex-direction: column;
         align-items: center;
         justify-content: flex-start;
         gap: 2rem;
+
+        @include breakpoint-up(medium){
+            flex-direction: row;
+        }
 
         &>input[type="radio"]{
             display: none;
         }
 
+        /*
+        causes a visual bug that causes the options to 
+        appear selected when restarting a game
+
         &>input[type="radio"]:checked + label{
             background-color: $button;
             color: $white;
         }
+        */
 
         &>label{
             border: solid 1px $button;
@@ -94,6 +104,15 @@ form{
                 background-color: $red !important;
                 color: $font !important;
                 border: solid 1px transparent;
+                opacity: 0.5;
+            }
+
+            &.chosen{
+                background-color: $button;
+                color: $white;
+            }
+
+            &.notChosen{
                 opacity: 0.5;
             }
 
@@ -132,5 +151,34 @@ form{
         background-color: $select;
         color: $font;
         cursor: pointer;
+    }
+}
+
+.answersChecked{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    color: $font;
+    font-size: 0.85rem;
+
+    position: relative;
+
+    @include breakpoint-up(medium){ 
+        flex-direction: row;     
+        gap: 2rem;
+        font-size: 1.2rem;
+    }
+
+    &>div{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;        
+        background-color: transparent;
     }
 }

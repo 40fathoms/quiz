@@ -2,8 +2,6 @@ import React from 'react'
 
 const Options = (props) => {
 
-    
-    //console.log(props.isPlaying)
     // handle the styling of the options buttons according to the game status
     let situationStyle
 
@@ -13,6 +11,12 @@ const Options = (props) => {
     else if(!props.isCorrect && props.checked && !props.isPlaying){
         situationStyle="incorrect"
     }
+    else if(props.checked && props.isPlaying){
+        situationStyle="chosen"
+    }
+    else if(!props.isCorrect && !props.checked && !props.isPlaying){
+        situationStyle="notChosen"
+    }    
 
     return (
         <>

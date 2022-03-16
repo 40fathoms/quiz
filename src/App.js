@@ -1,7 +1,10 @@
 import React from 'react'
 import { nanoid } from 'nanoid'
+import Select from 'react-select'
 
 import Question from './components/Question'
+
+import customizeAPI from './customizeAPI'
 
 import Blue from './images/blue.png'
 import Yellow from './images/yellow.png'
@@ -16,14 +19,68 @@ function App() {
     backgroundPosition: "0% 100%, 100% 0%"
   }
 
-  //quiz questions & answers state
+  ////////////////////////////////////////////
+  // STATES 
+
+  // state to determine the quiz array of objects, containing the questions and options
   const [quiz, setQuiz] = React.useState([{}])
 
   // state to handle if the game is being played
   const [isPlaying, setIsPlaying] = React.useState(true)
 
-  // state to restart the game (determines if it displays the selection menu screen or the questions)
+  // state to determine if the selection menu screen or the game is displayed
   const [setup, setSetup] = React.useState(true);
+
+  // Select menu states
+
+  // state to handle the amount of questions
+  const [amount, setAmount] = React.useState("amount=5")
+
+  // generates an array of up to 10 objects necessary to create the amount of questions selection menu
+  function questionsAmount() {
+    let questionsAmount = []
+    for (let i = 1; i <= 10; i++) {
+      questionsAmount.push({ label: `${i}`, value: `amount=${i}` })
+    }
+    return questionsAmount
+  }
+  let amountOptions = questionsAmount()
+
+  function handleAmount(e) {
+    setAmount(e.value)
+  }
+
+  // state to handle the difficulty
+  const [category, setCategory] = React.useState("")
+
+  function handleCategory(e) {
+    setCategory(e.value)
+  }
+
+  // state to handle the difficulty
+  const [difficulty, setDifficulty] = React.useState("")
+
+  function handleDifficulty(e) {
+    setDifficulty(e.value)
+  }
+
+  // state to handle the type
+  const [type, setType] = React.useState("")
+
+  function handleType(e) {
+    setType(e.value)
+  }
+
+  ////////////////////////////////////////////
+
+  // function to convert HTML entities to UTF-8. 
+  // Called in fetchRequest-React.useCallback when fetching the question string 
+  // Called in allOptions() when fetching the options array 
+  function decodeHTMLEntities(str) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = str;
+    return txt.value;
+  }
 
   // function to create the options objects array - called in React.useEffect to create a new quiz array state
   function allOptions(correct_answer, incorrect_answers) {
@@ -31,20 +88,15 @@ function App() {
 
     // adds the correct option object to the options array
     optionElement.push(
-      { option: correct_answer, checked: false, isCorrect: true, id: nanoid() }
+      { option: decodeHTMLEntities(correct_answer), checked: false, isCorrect: true, id: nanoid() }
     )
 
     // adds the incorrect options objects to the options array
-    {
-      incorrect_answers !== undefined &&
-
-        incorrect_answers.map(option => {
-          optionElement.push(
-            { option: option, checked: false, isCorrect: false, id: nanoid() }
-          )
-        })
-
-    }
+    incorrect_answers.map(option => {
+      optionElement.push(
+        { option: decodeHTMLEntities(option), checked: false, isCorrect: false, id: nanoid() }
+      )
+    })
 
     // shuffles the options array
     function shuffleArray(array) {
@@ -59,21 +111,22 @@ function App() {
   }
 
   // fetch api for the trivia questions
-  // the [setup] condition allows the user to restart the game with new questions
-  React.useEffect(() => {
-    if (setup) {
-      fetch(`https://opentdb.com/api.php?amount=2`)
-        .then(res => res.json())
-        .then(data => setQuiz(data.results.map(item => {
-          return {
-            question: item.question,
-            options: allOptions(item.correct_answer, [...item.incorrect_answers]),
-            answered: false,
-            key: nanoid()
-          }
-        })))
-    }
-  }, [setup])
+  const fetchRequest = React.useCallback(() => {
+    fetch(`https://opentdb.com/api.php?${amount}${category}${difficulty}${type}`)
+      .then(res => res.json())
+      .then(data => setQuiz(data.results.map(item => {
+        return {
+          question: decodeHTMLEntities(item.question),
+          options: allOptions(item.correct_answer, [...item.incorrect_answers]),
+          category: item.category,
+          difficulty: item.difficulty,
+          type: item.type,
+          answered: false,
+          key: nanoid()
+        }
+      })))
+  }, [amount, category, difficulty, type]);
+
 
   // function to handle if the option is checked or not
   function handleChecked(e, idQuestion, idOption) {
@@ -146,16 +199,44 @@ function App() {
 
   return (
 
-    // Checks if the game will display the categories selection or the questions
+    // Checks if the game will display the categories selection or the game
     setup == true ?
 
       // Select options menu
       <form style={backgroundImages}>
 
+        <Select
+          options={amountOptions}
+          placeholder={`Number of questions: 5`}
+          onChange={(e) => { handleAmount(e) }}
+          className="select"
+        />
+
+        <Select
+          options={customizeAPI.category}
+          placeholder={"Select a category"}
+          onChange={(e) => { handleCategory(e) }}
+          className="select"
+        />
+
+        <Select
+          options={customizeAPI.difficulty}
+          placeholder={"Select a difficulty"}
+          onChange={(e) => { handleDifficulty(e) }}
+          className="select"
+        />
+
+        <Select
+          options={customizeAPI.type}
+          placeholder={"Select a type"}
+          onChange={(e) => { handleType(e) }}
+          className="select"
+        />
+
         <button
           className='button'
           type='submit'
-          onClick={(e) => {handleSetup(e)}}
+          onClick={(e) => { handleSetup(e); fetchRequest() }}
         >Start Quiz</button>
 
       </form>
@@ -187,7 +268,8 @@ function App() {
             <button
               className='button'
               type='submit'
-              onClick={(e) => {handleIsPlaying(e)}}
+              style={{ opacity: quiz.every(question => question.answered) ? '1' : '0.5' }}
+              onClick={(e) => { handleIsPlaying(e) }}
             >Check Answers</button>
 
           </div>
@@ -202,7 +284,7 @@ function App() {
             <button
               className='button'
               type='submit'
-              onClick={(e) => { handleIsPlaying(e); handleSetup(e) }}
+              onClick={(e) => { handleIsPlaying(e); handleSetup(e); setQuiz([{}]); setAmount("amount=5"); setCategory(""); setDifficulty(""); setType("") }}
             >Play Again</button>
 
           </div>

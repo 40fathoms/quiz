@@ -55,6 +55,11 @@ form {
   gap: 3rem;
 }
 
+.select {
+  width: 95%;
+  max-width: 400px;
+}
+
 .questions {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -99,6 +104,13 @@ form {
 .question h2 {
   font-weight: 700;
   margin: 0;
+  text-align: center;
+}
+
+@media (min-width: 40em) {
+  .question h2 {
+    text-align: start;
+  }
 }
 
 .question-options {
@@ -177,7 +189,7 @@ form {
   opacity: 0.5;
 }
 
-.question-options > label:hover {
+.question-options > label:hover:not(.chosen) {
   border: solid 1px transparent;
   background-color: #D6DBF5;
 }

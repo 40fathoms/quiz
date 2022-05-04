@@ -3,13 +3,13 @@
 
 @import "config";
 
-main{
+main {
     position: relative;
     width: 100%;
     height: 100vh;
 }
 
-form{
+form {
     position: absolute;
     inset: 0;
 
@@ -24,12 +24,12 @@ form{
     gap: 3rem;
 }
 
-.select{
+.select {
     width: 95%;
     max-width: 400px;
 }
 
-.questions{
+.questions {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -37,7 +37,7 @@ form{
     gap: 2rem;
 }
 
-.question{
+.question {
 
     color: $font;
     font-weight: 700;
@@ -53,21 +53,21 @@ form{
     flex-direction: column;
     gap: 1.5rem;
 
-    @include breakpoint-up(medium){      
+    @include breakpoint-up(medium) {
         font-size: 1.2rem;
     }
 
-    h2{
+    h2 {
         font-weight: 700;
         margin: 0;
         text-align: center;
 
-        @include breakpoint-up(medium){      
+        @include breakpoint-up(medium) {
             text-align: start;
         }
     }
 
-    &-options{
+    &-options {
 
         margin: 0;
         padding: 0;
@@ -81,11 +81,11 @@ form{
         justify-content: flex-start;
         gap: 2rem;
 
-        @include breakpoint-up(medium){
+        @include breakpoint-up(medium) {
             flex-direction: row;
         }
 
-        &>input[type="radio"]{
+        &>input[type="radio"] {
             display: none;
         }
 
@@ -99,7 +99,7 @@ form{
         }
         */
 
-        &>label{
+        &>label {
             border: solid 1px $button;
             border-radius: 8px;
             padding: 0.5rem;
@@ -107,35 +107,35 @@ form{
             text-align: center;
             cursor: pointer;
 
-            &.correct{
+            &.correct {
                 background-color: $green !important;
                 color: $font !important;
                 border: solid 1px transparent;
             }
 
-            &.incorrect{
+            &.incorrect {
                 background-color: $red !important;
                 color: $font !important;
                 border: solid 1px transparent;
                 opacity: 0.5;
             }
 
-            &.chosen{
+            &.chosen {
                 background-color: $button;
                 color: $white;
             }
 
-            &.notChosen{
+            &.notChosen {
                 opacity: 0.5;
             }
-            
-            &:hover:not(.chosen){
+
+            &:hover:not(.chosen) {
                 border: solid 1px transparent;
                 background-color: $select;
             }
         }
 
-        &>div{
+        &>div {
             position: absolute;
             top: 0;
             bottom: 0;
@@ -147,8 +147,9 @@ form{
     }
 }
 
-.button, .button a{
-    color: $white;    
+.button,
+.button a {
+    color: $white;
     font-weight: 700;
     font-size: 1.2rem;
 
@@ -160,13 +161,13 @@ form{
     padding: 0.5rem;
     cursor: pointer;
 
-    &:hover{
+    &:hover {
         background-color: $select;
         color: $font;
     }
 }
 
-.answersChecked{
+.answersChecked {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -178,19 +179,52 @@ form{
 
     position: relative;
 
-    @include breakpoint-up(medium){ 
-        flex-direction: row;     
+    @include breakpoint-up(medium) {
+        flex-direction: row;
         gap: 2rem;
         font-size: 1.2rem;
     }
 
-    &>div{
+    &>div {
         position: absolute;
         top: 0;
         bottom: 0;
         left: 0;
         right: 0;
-        z-index: 1;        
+        z-index: 1;
         background-color: transparent;
+    }
+}
+
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+
+    &::after{
+        content: ' ';
+        display: block;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 6px solid $font;
+        border-color: $font transparent $font transparent;
+        animation: spinner 1.2s linear infinite;
+    }
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
     }
 }

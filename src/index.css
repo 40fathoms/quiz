@@ -207,7 +207,8 @@ form {
   background-color: transparent;
 }
 
-.button, .button a {
+.button,
+.button a {
   color: #fff;
   font-weight: 700;
   font-size: 1.2rem;
@@ -219,7 +220,8 @@ form {
   cursor: pointer;
 }
 
-.button:hover, .button a:hover {
+.button:hover,
+.button a:hover {
   background-color: #D6DBF5;
   color: #293264;
 }
@@ -263,5 +265,51 @@ form {
   right: 0;
   z-index: 1;
   background-color: transparent;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+.spinner::after {
+  content: ' ';
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #293264;
+  border-color: #293264 transparent #293264 transparent;
+  -webkit-animation: spinner 1.2s linear infinite;
+          animation: spinner 1.2s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 /*# sourceMappingURL=index.css.map */

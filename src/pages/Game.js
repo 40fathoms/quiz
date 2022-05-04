@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid'
 
 import Question from '../components/Question'
 import IsPlaying from '../components/IsPlaying';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 
 // function to convert HTML entities to UTF-8. 
@@ -12,7 +13,7 @@ function decodeHTMLEntities(str) {
     var txt = document.createElement("textarea");
     txt.innerHTML = str;
     return txt.value;
-} 
+}
 
 // function to create the options objects array - called in fetchRequest to create a new quiz array state
 function allOptions(correct_answer, incorrect_answers) {
@@ -44,7 +45,7 @@ function allOptions(correct_answer, incorrect_answers) {
 
 
 const Game = (props) => {
-    
+
     //destructuring the quizSettings prop
     const { amount, category, difficulty, type } = props.quizSettings;
 
@@ -67,12 +68,28 @@ const Game = (props) => {
         setIsPlaying(prev => !prev)
     }
 
+    // state to handle the loading feedback to the user
+    const [isLoading, setIsLoading] = React.useState(false)
+
     // fetch api for the trivia questions
-    React.useEffect(()=>{
+    React.useEffect(() => {
 
         const fetchRequest = async () => {
+            setIsLoading(true)
+
             fetch(`https://opentdb.com/api.php?${amount}${category}${difficulty}${type}`)
-                .then(res => res.json())
+                .then(response => {
+                    setIsLoading(false)
+
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    else {
+                        return response.json().then(data => {                    
+                            throw new Error("Failed to load questions")
+                        })
+                    }
+                })
                 .then(data => setQuiz(data.results.map(item => {
                     return {
                         question: decodeHTMLEntities(item.question),
@@ -84,11 +101,14 @@ const Game = (props) => {
                         key: nanoid()
                     }
                 })))
+                .catch((err) => {
+                    alert(err.message)
+                })
         };
 
         fetchRequest()
 
-    }, [amount, category, difficulty, type])    
+    }, [amount, category, difficulty, type])
 
 
     // function to handle if the option is checked or not
@@ -133,15 +153,20 @@ const Game = (props) => {
         )
     })
 
+    if(isLoading){
+        return(
+            <LoadingSpinner />
+        )
+    }
 
     return (
-        <form>            
-            
+        <form>
+
             <section className="questions">
                 {questionElement}
             </section>
 
-            <IsPlaying 
+            <IsPlaying
                 quiz={quiz}
                 isPlaying={isPlaying}
                 handleIsPlaying={handleIsPlaying}

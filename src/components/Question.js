@@ -6,13 +6,14 @@ import Options from './Options'
 const Question = (props) => {
 
     let currentElement = []
-    if (props.options != undefined) {
+    if (props.options !== undefined) {
         (props.options).map(item => currentElement.push(item))     
     }
     
     const optionsElements = currentElement.map(item =>
         <Options
             // currentElement items array
+            key={nanoid()}
             option={item.option}
             isCorrect={item.isCorrect}
             checked={item.checked}

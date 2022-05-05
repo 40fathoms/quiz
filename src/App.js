@@ -11,7 +11,7 @@ function App() {
 
   // state that controls the quiz settings
   const [quizSettings, setQuizSettings] = React.useState({
-    amount: "amount=5",
+    amount: 5,
     category: "",
     difficulty: "",
     type: ""
@@ -20,7 +20,7 @@ function App() {
   function handleSettings(value, configType, reset = false) {
     if (reset) {
       setQuizSettings({
-        amount: "amount=5",
+        amount: 5,
         category: "",
         difficulty: "",
         type: ""
@@ -35,7 +35,7 @@ function App() {
       })
     }
   }
-
+  
   return (
     <Layout>
       <Routes>

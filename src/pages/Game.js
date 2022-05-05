@@ -77,7 +77,7 @@ const Game = (props) => {
         const fetchRequest = async () => {
             setIsLoading(true)
 
-            fetch(`https://opentdb.com/api.php?${amount}${category}${difficulty}${type}`)
+            fetch(`https://opentdb.com/api.php?amount=${amount}${category}${difficulty}${type}`)
                 .then(response => {
                     setIsLoading(false)
 
@@ -85,22 +85,29 @@ const Game = (props) => {
                         return response.json()
                     }
                     else {
-                        return response.json().then(data => {                    
+                        return response.json().then(data => {
                             throw new Error("Failed to load questions")
                         })
                     }
                 })
-                .then(data => setQuiz(data.results.map(item => {
-                    return {
-                        question: decodeHTMLEntities(item.question),
-                        options: allOptions(item.correct_answer, [...item.incorrect_answers]),
-                        category: item.category,
-                        difficulty: item.difficulty,
-                        type: item.type,
-                        answered: false,
-                        key: nanoid()
+                .then(data => {
+                    if(data.response_code === 1){
+                        props.handleSettings(amount-1, 'amount')
                     }
-                })))
+                    return (
+                        setQuiz(data.results.map(item => {
+                            return {
+                                question: decodeHTMLEntities(item.question),
+                                options: allOptions(item.correct_answer, [...item.incorrect_answers]),
+                                category: item.category,
+                                difficulty: item.difficulty,
+                                type: item.type,
+                                answered: false,
+                                key: nanoid()
+                            }
+                        }))
+                    )
+                })
                 .catch((err) => {
                     alert(err.message)
                 })
@@ -153,8 +160,8 @@ const Game = (props) => {
         )
     })
 
-    if(isLoading){
-        return(
+    if (isLoading) {
+        return (
             <LoadingSpinner />
         )
     }

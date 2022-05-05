@@ -10,7 +10,7 @@ const Selection = (props) => {
     function questionsAmount() {
         let questionsAmount = []
         for (let i = 1; i <= 10; i++) {
-            questionsAmount.push({ label: `${i}`, value: `amount=${i}` })
+            questionsAmount.push({ label: `${i}`, value: i })
         }
         return questionsAmount
     }
